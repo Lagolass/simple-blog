@@ -1,0 +1,41 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('posts', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('user_id')->unsigned()->default(0);
+            $table->string('title');
+            $table->string('description', 500)->nullable();
+            $table->mediumText('content')->nullable();
+            $table->text('image')->nullable();
+            $table->boolean('is_published')->unsigned()->default(0);
+            $table->timestamp('published_at')->nullable();
+            $table->timestamps();
+            $table->index(['user_id']);
+
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('posts');
+    }
+};
